@@ -66,3 +66,35 @@ SyntaxError: Unexpected token '<', "<?xml vers"... is not valid JSON {stack: `Sy
   
     loadMeal();
   </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function setTodayDateText() {
+  const dateBox = document.getElementById("todayDate");
+
+  const today = new Date();
+
+  const year = today.getFullYear();
+  const month = today.getMonth() + 1;
+  const date = today.getDate();
+
+  const dayNames = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
+  const day = dayNames[today.getDay()];
+
+  dateBox.textContent = `${year}년 ${month}월 ${date}일 ${day}`;
+}
