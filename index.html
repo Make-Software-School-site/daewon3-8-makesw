@@ -372,7 +372,7 @@
     </div>
 
     <div class="today-card">
-      <div class="date">2026년 4월 30일 목요일</div>
+      <div class="date" id="todayDate">날짜 불러오는 중..</div>
       <h2>오늘의 학급 정보</h2>
       <p>
         <학급정보?부가정보 적기>
@@ -498,8 +498,10 @@
           const menus = menuText
             .replaceAll("<br/>", "\n")
             .split("\n")
-            .map(menu => menu.trim()) //.map(menu => menu.replace(/\([^)]*\)/g, "").trim())  <- 알레르기 번호 없애는거 ㅇㅇ
+            .map(menu => menu.trim()) // .map(menu => menu.replace(/\([^)]*\)/g, "").trim())  <- 알레르기 번호 없애는거 ㅇㅇ
             .filter(menu => menu !== "");
+            
+      
             
         
           menus.forEach(menu => {
@@ -513,7 +515,23 @@
           mealList.innerHTML = "<li>급식 정보를 불러오지 못했습니다.</li>";
         }
       }
-    
+
+      function setTodayDateText() {
+        const dateBox = document.getElementById("todayDate");
+      
+        const today = new Date();
+      
+        const year = today.getFullYear();
+        const month = today.getMonth() + 1;
+        const date = today.getDate();
+      
+        const dayNames = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
+        const day = dayNames[today.getDay()];
+      
+        dateBox.textContent = `${year}년 ${month}월 ${date}일 ${day}`;
+      }
+
+      setTodayDateText();
       loadMeal();
     </script>
 </body>
