@@ -22,12 +22,12 @@
 python -m http.server 8000
 ```
 
-## 파일 구조
+## 파일
 
 ```text
 index.html   페이지 구조
-styles.css   전체 디자인 및 반응형 스타일
-script.js    콘텐츠, API, 저장 및 상호작용
-config.js    Google Sheets 연결 설정
-images/      이미지 리소스
+styles.css   전체 디자인
+script.js    api, 저장
+config.js    구글시트 연결 설정
+images/      이미지 리소스ㅡ
 ```
