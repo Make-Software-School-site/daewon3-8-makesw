@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="대원고 급식, 개인 시간표, 공지와 주요 일정을 한눈에 확인하는 학생 생활 웹사이트">
+  <meta name="theme-color" content="#111827">
+  <meta property="og:title" content="MESO(MakE SOftware) | 대원고 학생 생활 웹사이트">
+  <meta property="og:description" content="급식, 시간표, 공지, D-Day와 학생 활동을 한곳에서 확인하세요.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://daewon3-8-msw.kro.kr">
+  <title>MESO(MakE SOftware) | 대원고 학생 생활 웹사이트</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="config.js"></script>
+  <script src="script.js" defer></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#mainContent">본문 바로가기</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#home" aria-label="MESO(MakE SOftware) 홈">
+        <span class="brand-mark" aria-hidden="true">M</span>
+        <span class="brand-copy">
+          <strong>MESO(MakE SOftware)</strong>
+          <small>대원고 학생 생활</small>
+        </span>
+      </a>
+
+      <nav class="desktop-nav" aria-label="주요 메뉴">
+        <a href="#home">오늘</a>
+        <a href="#notice">공지</a>
+        <a href="#activities">탐색</a>
+        <a href="#mission">오늘의 1분 퀴즈</a>
+      </nav>
+
+      <button class="header-action" type="button" data-open-timetable>
+        <span class="header-action-dot" aria-hidden="true"></span>
+        시간표 설정
+      </button>
+    </div>
+  </header>
+
+  <main id="mainContent">
+    <section class="school-home" id="home" aria-labelledby="schoolHomeHeading">
+      <div class="section-shell">
+        <div class="school-home-heading">
+          <div>
+            <p class="section-kicker">대원고 TODAY</p>
+            <h1 id="schoolHomeHeading">오늘의 학교생활</h1>
+          </div>
+          <div class="school-date-block">
+            <span>대원고등학교</span>
+            <strong id="todayDate">날짜를 불러오는 중...</strong>
+          </div>
+        </div>
+
+        <section class="dday-board" aria-labelledby="ddayHeading">
+          <div class="dday-title">
+            <span class="live-indicator" aria-hidden="true"></span>
+            <h2 id="ddayHeading">주요 일정</h2>
+          </div>
+          <div class="dday-list" id="ddayList" aria-live="polite">
+            <div class="dday-item loading-card"><span>일정을 불러오는 중...</span></div>
+          </div>
+        </section>
+
+        <div class="school-dashboard-grid">
+          <article class="school-panel school-meal-panel">
+            <div class="school-panel-head">
+              <div>
+                <span class="panel-number">01</span>
+                <p>오늘의 급식</p>
+              </div>
+              <span class="panel-state">나이스 연동</span>
+            </div>
+            <h2 id="mealHeadline">급식 정보를 확인하고 있어요</h2>
+            <ul id="mealPreview" class="school-meal-list" aria-live="polite">
+              <li>잠시만 기다려 주세요.</li>
+            </ul>
+          </article>
+
+          <article class="school-panel school-schedule-panel">
+            <div class="school-panel-head">
+              <div>
+                <span class="panel-number">02</span>
+                <p>나의 오늘 시간표</p>
+              </div>
+              <button class="panel-action" type="button" data-open-timetable>시간표 설정</button>
+            </div>
+            <h2 id="scheduleHeadline">시간표를 설정해 주세요</h2>
+            <div id="todaySchedulePreview" class="today-class-list" aria-live="polite">
+              <span class="empty-chip">아직 저장된 시간표가 없습니다.</span>
+            </div>
+          </article>
+
+          <aside class="school-panel notice-panel" id="notice" aria-labelledby="noticeHeading">
+            <div class="school-panel-head">
+              <div>
+                <span class="panel-number">03</span>
+                <p id="noticeHeading">학교 공지</p>
+              </div>
+              <span class="data-source" id="dataSourceStatus">관리 데이터 확인 중</span>
+            </div>
+            <div class="notice-list" id="noticeList" aria-live="polite">
+              <p class="notice-loading">공지사항을 불러오는 중...</p>
+            </div>
+          </aside>
+        </div>
+
+        <div class="school-utility-bar">
+          <a href="https://daewon.dge.hs.kr" target="_blank" rel="noopener noreferrer">
+            <span>학교 공식 홈페이지</span>
+            <strong>대원고 바로가기 ↗</strong>
+          </a>
+          <a href="https://dw.riroschool.kr/" target="_blank" rel="noopener noreferrer">
+            <span>학교 학습</span>
+            <strong>대원고등학교 리로스쿨 바로가기</strong>
+            <small></small>
+          </a>
+          <a href="#activities">
+            <span>학생 활동</span>
+            <strong>최신 카드뉴스·게임 보기 →</strong>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="hero" id="meso">
+      <div class="hero-grid">
+        <div class="hero-copy reveal">
+          <div class="eyebrow">
+            <span>활동 01</span>
+            <span>2026 활동 자료</span>
+          </div>
+          <h1>
+            AI·컴퓨터<br>
+            <span>활동 자료</span>
+          </h1>
+          <p class="hero-description">
+            MESO(MakE SOftware)에서 제작한 카드뉴스, 간단한 게임과 AI관련 자료와 학교 관련 정보를 모았습니다
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#activities">
+              탐색
+              <span aria-hidden="true">↗</span>
+            </a>
+            <a class="button button-quiet" href="#mission">오늘의 1분 퀴즈</a>
+          </div>
+          <dl class="hero-stats">
+            <div>
+              <dt id="activityCount">03</dt>
+              <dd>공개 활동</dd>
+            </div>
+            <div>
+              <dt>03</dt>
+              <dd>활동 분야</dd>
+            </div>
+            <div>
+              <dt id="heroStreak">00</dt>
+              <dd>나의 연속 참여</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="hero-visual reveal" role="img" aria-label="MESO(MakE SOftware) 활동 미리보기">
+          <div class="visual-grid" aria-hidden="true"></div>
+          <div class="signal-orbit signal-orbit-large" aria-hidden="true"></div>
+          <div class="signal-orbit signal-orbit-small" aria-hidden="true"></div>
+          <div class="visual-card visual-card-main">
+            <span class="visual-label">추천 활동</span>
+            <div class="visual-code">AI<span>/</span>01</div>
+            <h2>생성형 AI는<br>어떻게 대답할까?</h2>
+            <div class="visual-progress"><span></span></div>
+            <div class="visual-meta">
+              <span>8장</span>
+              <span>5분</span>
+            </div>
+          </div>
+          <div class="visual-card visual-card-note">
+            <span>오늘의 안내</span>
+            <strong>새로운 질문이<br>새로운 결과를 만든다.</strong>
+          </div>
+          <div class="visual-status">
+            <span class="pulse-dot"></span>
+            LAB ONLINE
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="school-info-section" id="schoolInfo" aria-labelledby="schoolInfoHeading">
+      <div class="section-shell">
+        <div class="section-heading reveal">
+          <div>
+            <p class="section-kicker">학교생활 안내</p>
+            <h2 id="schoolInfoHeading">알아두면 좋은 학교생활 정보</h2>
+          </div>
+          <p>ㅁㅁㅁㅁㅁㅁ테스트</p>
+        </div>
+        <div class="school-info-grid" id="schoolInfoGrid" aria-live="polite">
+          <article class="school-info-card"><span>정보를 불러오는 중...</span></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="featured-section" aria-labelledby="featuredHeading">
+      <div class="section-shell">
+        <div class="section-heading reveal">
+          <div>
+            <p class="section-kicker">추천 활동 · 01</p>
+            <h2 id="featuredHeading">이번 주에 가장 먼저 볼 활동</h2>
+          </div>
+          <p>MESO(MakE SOftware)의 추천 기록</p>
+        </div>
+
+        <article class="featured-story reveal" data-activity-id="ai-answer">
+          <div class="featured-art featured-art-ai" aria-hidden="true">
+            <span class="art-coordinate">대원고 학생 활동</span>
+            <div class="art-sphere"></div>
+            <div class="art-type">AI와<br>생각하기</div>
+            <span class="art-number">01</span>
+          </div>
+          <div class="featured-copy">
+            <div class="activity-meta">
+              <span class="type-badge type-cardnews">카드뉴스</span>
+              <span>AI 원리</span>
+              <span>5분</span>
+            </div>
+            <h3>생성형 AI는<br>어떻게 대답을 만들까?</h3>
+            <p>
+              AI가 정답을 꺼내는 것이 아니라 다음 단어를 예측한다는 사실부터,
+              좋은 질문이 결과를 바꾸는 이유까지 8장의 기록으로 살펴봅니다.
+            </p>
+            <div class="featured-actions">
+              <button class="button button-dark" type="button" data-open-activity="ai-answer">
+                카드뉴스 읽기
+                <span aria-hidden="true">→</span>
+              </button>
+              <button class="bookmark-button" type="button" data-bookmark="ai-answer" aria-label="생성형 AI 활동 북마크">
+                <span aria-hidden="true">＋</span> 보관하기
+              </button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="activities-section" id="activities" aria-labelledby="activitiesHeading">
+      <div class="section-shell">
+        <div class="section-heading reveal">
+          <div>
+            <p class="section-kicker">활동 목록</p>
+            <h2 id="activitiesHeading">MESO(MakE SOftware) 활동 자료</h2>
+          </div>
+          <p>현재 공개된 카드뉴스, 게임과 웹 프로젝트를 확인할수 있습니다</p>
+        </div>
+
+        <div class="filter-bar reveal" role="group" aria-label="활동 필터">
+          <button class="filter-button active" type="button" data-filter="all" aria-pressed="true">전체</button>
+          <button class="filter-button" type="button" data-filter="cardnews" aria-pressed="false">카드뉴스</button>
+          <button class="filter-button" type="button" data-filter="game" aria-pressed="false">게임</button>
+          <button class="filter-button" type="button" data-filter="project" aria-pressed="false">프로젝트</button>
+          <button class="filter-button saved-filter" type="button" data-filter="saved" aria-pressed="false">
+            보관함 <span id="savedCount">0</span>
+          </button>
+        </div>
+
+        <div class="activity-grid" id="activityGrid" aria-live="polite"></div>
+        <p class="empty-activities" id="emptyActivities" hidden>이 필터에 해당하는 활동이 없습니다.</p>
+      </div>
+    </section>
+
+    <section class="mission-section" id="mission" aria-labelledby="missionHeading">
+      <div class="section-shell mission-layout">
+        <div class="mission-intro reveal">
+          <p class="section-kicker light">오늘의 1분 퀴즈</p>
+          <h2 id="missionHeading">오늘의<br>1분 퀴즈</h2>
+          <p>
+            Ai,컴퓨터 관련 문제를 하루 한개 제공합니다
+            참여 결과와 연속기록은 현재 사이트에 저장됩니다
+          </p>
+          <div class="streak-display">
+            <span>연속 참여</span>
+            <strong><span id="streakCount">0</span>일</strong>
+          </div>
+        </div>
+
+        <div class="mission-card reveal">
+          <div class="mission-card-top">
+            <span id="missionNumber">퀴즈 001</span>
+            <span id="missionCategory">AI 기초</span>
+          </div>
+          <h3 id="missionQuestion">오늘의 문제를 준비하고 있습니다.</h3>
+          <div class="mission-options" id="missionOptions"></div>
+          <div class="mission-result" id="missionResult" role="status" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="games-section" id="games" aria-labelledby="gamesHeading">
+      <div class="section-shell">
+        <div class="section-heading reveal">
+          <div>
+            <p class="section-kicker">게임</p>
+            <h2 id="gamesHeading">이진수 변환 게임 (뭐 더 재밌는 게임추가하고 싶긴한데 시간이 없어서 일단 이거라도)</h2>
+          </div>
+          <p>30초 동안 이진수를 십진수로 변환하고 최고 기록에 도전할수 있습니다</p>
+        </div>
+
+        <div class="game-stage reveal">
+          <div class="game-copy">
+            <span class="game-label">미니게임</span>
+            <h3>0과 1의 신호를<br>제한 시간 안에 해독하세요.</h3>
+            <p>화면에 나타난 이진수를 십진수로 바꾸는 30초 두뇌 게임</p>
+            <button class="button button-signal" type="button" id="startBinaryGame">게임 시작</button>
+          </div>
+          <div class="binary-game" id="binaryGame">
+            <div class="binary-game-head">
+              <span>남은 시간 <strong id="binaryTime">30</strong></span>
+              <span>점수 <strong id="binaryScore">0</strong></span>
+            </div>
+            <div class="binary-screen">
+              <span class="binary-caption">이진수</span>
+              <strong id="binaryQuestion">0101</strong>
+              <p id="binaryPrompt">게임 시작 버튼을 눌러주세요.</p>
+            </div>
+            <form class="binary-form" id="binaryForm">
+              <label class="sr-only" for="binaryAnswer">십진수 정답</label>
+              <input id="binaryAnswer" type="number" min="0" max="31" placeholder="정답" disabled>
+              <button type="submit" disabled>입력</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="submit-section" aria-labelledby="submitHeading">
+      <div class="section-shell submit-card reveal">
+        <div>
+          <p class="section-kicker light">업데이트 예정</p>
+          <h2 id="submitHeading">준비중</h2>
+        </div>
+        <div class="submit-copy">
+          <p>이거ㅓㄴ 아직 미완성</p>
+          <button class="button button-light" type="button" disabled>업데이트 예정</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <a class="brand footer-brand" href="#home">
+          <span class="brand-mark" aria-hidden="true">M</span>
+          <span class="brand-copy"><strong>MESO(MakE SOftware)</strong><small>대원고 학생 생활</small></span>
+        </a>
+        <p>대원고 급식, 시간표와 학생 활동 정보를 제공하는 종합 사이트 입니다</p>
+      </div>
+      <div class="footer-meta">
+        <p>© 2026 MESO(MakE SOftware) · 3학년 8반 학급부서</p>
+        <p>김태양 · 김영훈 · 은성록</p>
+      </div>
+    </div>
+  </footer>
+
+  <nav class="mobile-nav" aria-label="모바일 주요 메뉴">
+    <a href="#home"><span aria-hidden="true">⌂</span>홈</a>
+    <a href="#activities"><span aria-hidden="true">▦</span>활동</a>
+    <a href="#mission"><span aria-hidden="true">◇</span>퀴즈</a>
+    <button type="button" data-open-timetable><span aria-hidden="true">▤</span>내 오늘</button>
+  </nav>
+
+  <dialog class="activity-dialog" id="activityDialog" aria-labelledby="dialogActivityTitle">
+    <button class="dialog-close" type="button" data-close-dialog aria-label="활동 창 닫기">×</button>
+    <div class="dialog-activity-meta" id="dialogActivityMeta"></div>
+    <h2 id="dialogActivityTitle">활동 상세</h2>
+    <p class="dialog-summary" id="dialogActivitySummary"></p>
+    <div class="cardnews-viewer" id="cardnewsViewer">
+      <div class="cardnews-slide" id="cardnewsSlide"></div>
+      <div class="cardnews-controls">
+        <button type="button" id="previousSlide">← 이전</button>
+        <span id="slideProgress">1 / 1</span>
+        <button type="button" id="nextSlide">다음 →</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="timetable-dialog" id="timetableDialog" aria-labelledby="timetableDialogTitle">
+    <div class="dialog-header">
+      <div>
+        <span class="dialog-kicker">주간 시간표</span>
+        <h2 id="timetableDialogTitle">나의 시간표 설정</h2>
+      </div>
+      <button class="dialog-close static-close" type="button" data-close-timetable aria-label="시간표 설정 닫기">×</button>
+    </div>
+
+    <p class="timetable-guide">
+      학년을 먼저 선택한 뒤 각 칸에 과목명 또는 공강을 입력하세요.
+      과목명은 대원고 1~8반 NEIS 시간표를 바탕으로 추천됩니다.
+    </p>
+
+    <div class="grade-selection-card">
+      <div class="grade-selection-copy">
+        <span class="grade-step">1단계</span>
+        <strong>내 학년을 선택하세요</strong>
+        <p>선택한 학년의 과목만 자동완성 목록에 표시됩니다.</p>
+      </div>
+      <label class="grade-field">
+        과목 추천 학년
+        <select id="subjectGrade">
+          <option value="1">1학년</option>
+          <option value="2">2학년</option>
+          <option value="3">3학년</option>
+        </select>
+      </label>
+    </div>
+
+    <p class="subject-source-status" id="subjectSourceStatus" role="status" aria-live="polite">
+      시간표 편집기를 열면 과목 목록을 불러옵니다.
+    </p>
+
+    <div class="timetable-scroll">
+      <table class="personal-timetable">
+        <thead>
+          <tr>
+            <th scope="col">교시</th>
+            <th scope="col">월</th>
+            <th scope="col">화</th>
+            <th scope="col">수</th>
+            <th scope="col">목</th>
+            <th scope="col">금</th>
+          </tr>
+        </thead>
+        <tbody id="timetableBody"></tbody>
+      </table>
+      <datalist id="subjectSuggestions"></datalist>
+    </div>
+
+    <div class="timetable-actions">
+      <div>
+        <button class="button button-primary" type="button" id="saveTimetableBtn">내 시간표 저장하기</button>
+        <button class="button button-quiet" type="button" id="resetTimetableBtn">전체 초기화</button>
+      </div>
+      <p id="timetableSaveStatus" role="status" aria-live="polite">시간표는 이 브라우저에만 저장됩니다.</p>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
