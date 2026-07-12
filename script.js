@@ -293,11 +293,54 @@ function sanitizeManagedLink(value) {
     : "";
 }
 
-async function fetchSheetRows(sheetName) {
-  const url = `https://docs.google.com/spreadsheets/d/${encodeURIComponent(GOOGLE_SHEET_ID)}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}`;
-  const response = await fetch(url, { cache: "no-store" });
-  if (!response.ok) throw new Error(`${sheetName} 시트 요청 실패: ${response.status}`);
-  return parseCsv(await response.text());
+let sheetRequestId = 0;
+
+function fetchSheetRows(sheetName) {
+  return new Promise((resolve, reject) => {
+    sheetRequestId += 1;
+    const callbackName = `mesoSheetCallback${sheetRequestId}`;
+    const script = document.createElement("script");
+    const timeout = setTimeout(() => {
+      cleanup();
+      reject(new Error(`${sheetName} 시트 요청 시간이 초과되었습니다.`));
+    }, 10000);
+
+    function cleanup() {
+      clearTimeout(timeout);
+      script.remove();
+      delete window[callbackName];
+    }
+
+    window[callbackName] = response => {
+      if (response.status !== "ok" || !response.table) {
+        cleanup();
+        reject(new Error(`${sheetName} 시트 응답을 읽지 못했습니다.`));
+        return;
+      }
+
+      const headers = response.table.cols.map(column => column.label || column.id);
+      const rows = response.table.rows.map(tableRow => Object.fromEntries(
+        headers.map((header, index) => {
+          const cell = tableRow.c?.[index];
+          return [header, String(cell?.f ?? cell?.v ?? "").trim()];
+        })
+      ));
+      cleanup();
+      resolve(rows);
+    };
+
+    script.onerror = () => {
+      cleanup();
+      reject(new Error(`${sheetName} 시트 스크립트를 불러오지 못했습니다.`));
+    };
+
+    const params = new URLSearchParams({
+      tqx: `out:json;responseHandler:${callbackName}`,
+      sheet: sheetName
+    });
+    script.src = `https://docs.google.com/spreadsheets/d/${encodeURIComponent(GOOGLE_SHEET_ID)}/gviz/tq?${params}`;
+    document.head.appendChild(script);
+  });
 }
 
 function mapNoticeRows(rows) {

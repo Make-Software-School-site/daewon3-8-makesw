@@ -1,6 +1,6 @@
 window.MESO_CONFIG = {
   // Google Sheets 주소에서 /d/ 와 /edit 사이의 값을 입력하세요.
-  googleSheetId: "",
+  googleSheetId: "1Bsxt5vqSP0e4JjqziFJeosBpQ2BhkQLDxkg1SZ9ktwg",
   sheets: {
     notices: "공지사항",
     events: "일정",
