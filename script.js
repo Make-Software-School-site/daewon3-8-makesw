@@ -318,8 +318,16 @@ function fetchSheetRows(sheetName) {
         return;
       }
 
-      const headers = response.table.cols.map(column => column.label || column.id);
-      const rows = response.table.rows.map(tableRow => Object.fromEntries(
+      let headers = response.table.cols.map(column => (column.label || "").trim());
+      let tableRows = response.table.rows;
+
+      // Google Sheets may return the first row as data when every column is text.
+      if (headers.every(header => !header) && tableRows.length > 0) {
+        headers = tableRows[0].c.map(cell => String(cell?.f ?? cell?.v ?? "").trim());
+        tableRows = tableRows.slice(1);
+      }
+
+      const rows = tableRows.map(tableRow => Object.fromEntries(
         headers.map((header, index) => {
           const cell = tableRow.c?.[index];
           return [header, String(cell?.f ?? cell?.v ?? "").trim()];
@@ -371,7 +379,7 @@ function mapSchoolInfoRows(rows) {
   return rows
     .filter(row => isPublicRow(pickValue(row, "공개", "공개 여부", "visible")))
     .map(row => ({
-      category: pickValue(row, "항목", "분류", "category") || "SCHOOL INFO",
+      category: pickValue(row, "항목", "분류", "category") || "학교 정보",
       title: pickValue(row, "제목", "title"),
       content: pickValue(row, "내용", "content"),
       link: sanitizeManagedLink(pickValue(row, "링크", "link")),
@@ -461,7 +469,7 @@ function renderSchoolInfo(items) {
   const grid = document.getElementById("schoolInfoGrid");
   const visibleItems = items.slice(0, 3);
   if (visibleItems.length === 0) {
-    grid.innerHTML = '<article class="school-info-card"><span>SCHOOL INFO</span><h3>등록된 학교 정보가 없습니다.</h3></article>';
+    grid.innerHTML = '<article class="school-info-card"><span>학교 정보</span><h3>등록된 학교 정보가 없습니다.</h3></article>';
     return;
   }
 
