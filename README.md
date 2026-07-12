@@ -1,5 +1,8 @@
 # MESO(MakE SOftware)
 
+## 공지사항이나 디데이 그런거 수정하는법 (구글 시트 연동)
+
+https://docs.google.com/spreadsheets/d/1Bsxt5vqSP0e4JjqziFJeosBpQ2BhkQLDxkg1SZ9ktwg/edit?usp=sharing
 
 - 카드뉴스
 - 퀴즈
@@ -10,9 +13,8 @@
 - 구글 시트 기반 공지, 일정, 학교정보 관리
 - 등등
 
-## Google Sheets 관리자 설정
 
-이건 일단 추가 중 ㄱㄷ
+여기 들어가서ㅓ 수정하면 됨
 
 ### 공지사항 탭
 
